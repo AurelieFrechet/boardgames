@@ -96,7 +96,7 @@ ggplot(boardgames, aes(x=game_duration_minutes)) +
 
 # Croisement des variables ------------------------------------------------
 
-## Category  x Game duration ----
+### Category  x Game duration ----
 
 ggplot(data = boardgames,
        aes(x = game_duration_minutes, y = category, fill = category)) +
@@ -124,7 +124,7 @@ ggplot(data = boardgames, aes(x = min_age, y = category, fill = category)) +
   scale_fill_manual(values = boardgames_palette) +
   theme_minimal()
 
-### Nombre de joueureuses ----
+### Category x Nombre de joueureuses ----
 
 qplot(max_players, data = boardgames) 
 
@@ -136,13 +136,10 @@ ggplot(data = boardgames, aes(max_players, category)) +
   theme_minimal()
 
 
-### Category x Editor
+### Category x Editor ----
 table(boardgames$editor, boardgames$category)
 
-## Par éditeur -----------------------------------------------------------
-table(boardgames$editor)
-
-### Game duration ----
+### Editor x Game duration ----
 ggplot(data = boardgames, aes(game_duration_minutes, editor)) + 
   geom_violin() +
   # geom_boxplot() +
@@ -150,6 +147,10 @@ ggplot(data = boardgames, aes(game_duration_minutes, editor)) +
                      limits = c(0, NA),
                      expand = c(0, 0)) +
   theme_minimal()
+
+### Numerics ----
+pairs(boardgames[, c("min_age", "min_players", "max_players", "game_duration_minutes")])
+
 
 
 
@@ -166,6 +167,8 @@ boardgames_map <- cbind(boardgames, coords)
 
 saveRDS(boardgames_map, "data/boardgames_map.RDS")
 
+
+
 library(plotly)
 hover_text <- paste(
   "<b>", boardgames_map$name, "</b><br>",
@@ -173,7 +176,6 @@ hover_text <- paste(
   "Durée: ", boardgames_map$game_duration_minutes, " min<br>",
   "Joueurs: ", paste(boardgames_map$min_players, boardgames_map$max_players, sep ="-")
 )
-
 
 plot_ly(
   data = boardgames_map,
