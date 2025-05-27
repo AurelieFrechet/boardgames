@@ -1,4 +1,4 @@
-# app.R
+# Packages & data ----------------------------------------------------------
 library(shiny)
 library(bslib)
 library(plotly)
@@ -6,8 +6,7 @@ library(plotly)
 # Chargement des données 
 boardgames <- readRDS("data/boardgames_map.RDS")
 
-
-# Palette douce inspirée des petits boardgames
+# Thèmes
 boardgames_palette <- c(
   "Jeux Experts" = "#FF3000",  
   "Jeux Initiés" = "#2FCDCD",  
@@ -15,7 +14,6 @@ boardgames_palette <- c(
   "Jeux Enfants" = "#9ACD00"  
 )
 
-# Thème bslib harmonisé
 boardgames_theme <- bs_theme(
   version = 5,
   bg = "#F9F9F9",
@@ -26,6 +24,8 @@ boardgames_theme <- bs_theme(
   info = "#2FCDCD"
 )
 
+
+# UI ----------------------------------------------------------------------
 ui <- page_fluid(
   theme = boardgames_theme,
   
@@ -69,6 +69,10 @@ ui <- page_fluid(
   )
 )
 
+
+# Server ------------------------------------------------------------------
+
+
 server <- function(input, output) {
   filtered_data <- reactive({
     boardgames[boardgames$category %in% input$category &
@@ -109,5 +113,9 @@ server <- function(input, output) {
       )
   })
 }
+
+
+# App ---------------------------------------------------------------------
+
 
 shinyApp(ui, server)
